@@ -37,7 +37,7 @@
 // import 'core-js/es6/map';
 // import 'core-js/es6/weak-map';
 // import 'core-js/es6/set';
-import 'core-js/modules/es7.array.includes';
+// import 'core-js/modules/es7.array.includes';
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 /***************************************************************************************************
