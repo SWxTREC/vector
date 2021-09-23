@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-
+import {
+    LaspBaseAppSnippetsService
+} from 'lasp-base-app-snippets';
 import {
     IImageLink,
     INavItem,
     ISocialLink,
     IVersion
 } from 'lasp-footer';
-
-import {
-    LaspBaseAppSnippetsService
-} from 'lasp-base-app-snippets';
 
 import { environment } from '../environments/environment';
 
@@ -35,7 +33,7 @@ export class AppComponent {
         }
     ];
 
-    orgLogos: IImageLink[] = [
+    partnerLogos: IImageLink[] = [
         {
             src: 'https://lasp.colorado.edu/media/projects/base-app/images/footer-lasp-logo.png',
             href: 'http://lasp.colorado.edu'
@@ -44,8 +42,14 @@ export class AppComponent {
 
     socialLinks: ISocialLink[] = [
         {
+            name: 'twitter',
+            href: 'https://twitter.com/spaceweathercu'
+        }, {
             name: 'github',
-            href: 'https://github.com/SWxTREC/vector-code'
+            href: 'https://github.com/SWxTREC'
+        }, {
+            name: 'vimeo',
+            href: 'https://vimeo.com/user128770849'
         }
     ];
 
