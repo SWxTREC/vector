@@ -97,8 +97,8 @@ export class CalculatorComponent implements OnInit {
     vrmlImageSrc: SafeUrl;
 
     constructor(
-        private modelService: ModelService,
-        private sanitizer: DomSanitizer
+        private _modelService: ModelService,
+        private _sanitizer: DomSanitizer
     ) {}
 
     ngOnInit() {
@@ -162,7 +162,7 @@ export class CalculatorComponent implements OnInit {
         this.uploadedFileName = file ? file.name : undefined;
         this.validateFileUpload();
         if ( file ) {
-            this.modelService.submitGeometryFile( 'custom', file )
+            this._modelService.submitGeometryFile( 'custom', file )
                 .subscribe( result => {
                     this.imageFileId = result.userId;
                 });
@@ -234,6 +234,8 @@ export class CalculatorComponent implements OnInit {
                 return 'surface mass must be 1 or greater';
             }
             break;
+        default:
+            return;
         }
     }
 
@@ -243,7 +245,7 @@ export class CalculatorComponent implements OnInit {
         // preloaded file with an identifier
         if ( geometry.identifier ) {
             this.geometryFileName = geometry.label;
-            this.modelService.submitGeometryFile( geometry.identifier )
+            this._modelService.submitGeometryFile( geometry.identifier )
                 .subscribe( result => {
                     this.imageFileId = result.userId;
                 });
@@ -256,16 +258,16 @@ export class CalculatorComponent implements OnInit {
 
     onSubmit(): void {
         if ( this.modelForm.valid ) {
-            this.modelService.submitSinglePointRequest( this.payload, this.imageFileId ).subscribe( data => {
+            this._modelService.submitSinglePointRequest( this.payload, this.imageFileId ).subscribe( data => {
                 // this will only work for shallow objects from the api
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
                 if ( this.imageFileId && this.imageOutOfDate && ( this.uploadSelected || this.geometryFileName )) {
                     this.imageOutOfDate = false;
-                    this.modelService.getImage( this.imageFileId ).subscribe( blob => {
+                    this._modelService.getImage( this.imageFileId ).subscribe( blob => {
                         const objectUrl = URL.createObjectURL( blob );
-                        this.vrmlImageSrc = this.sanitizer.bypassSecurityTrustUrl( objectUrl );
+                        this.vrmlImageSrc = this._sanitizer.bypassSecurityTrustUrl( objectUrl );
                     });
                 }
             });
