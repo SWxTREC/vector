@@ -12,7 +12,7 @@ export class ModelService {
 
     submitSinglePointRequest( payload: any, id?: string ) {
         const url = id ? '/singlepoint/' + id : '/singlepoint';
-        return this.http.post<any>( environment.vectorApi + url , payload);
+        return this.http.post<any>( environment.vectorApi + url, payload);
     }
 
     submitGeometryFile( name: string, file?: any ) {

@@ -238,7 +238,7 @@ export class CalculatorComponent implements OnInit {
     }
 
     // triggered when any geometry file is chosen
-    getFileId( geometry: { identifier: string, label: string} ): void {
+    getFileId( geometry: { identifier: string; label: string} ): void {
         this.imageFileId = undefined;
         // preloaded file with an identifier
         if ( geometry.identifier ) {
@@ -298,7 +298,7 @@ export class CalculatorComponent implements OnInit {
     }
 
     round(value: number, decimals: number): string {
-        const roundedNumber: number = Number(Math.round(+(value + 'e' + decimals)) + 'e-' + decimals);
+        const roundedNumber = Number(Math.round(+(value + 'e' + decimals)) + 'e-' + decimals);
         return roundedNumber.toFixed(4);
     }
 
