@@ -62,7 +62,6 @@ export class CalculatorComponent implements OnInit {
             identifier: ''
         }
     ];
-    imageFileId: string;
     imageOutOfDate = false;
     fileNotChosen: string;
     payload: IModelParameters;
@@ -94,6 +93,7 @@ export class CalculatorComponent implements OnInit {
     showSurfaceMass: boolean;
     uploadedFileName: string;
     uploadSelected = false;
+    userId: string = Math.random().toString(36).substring(2, 8);
     vrmlImageSrc: SafeUrl;
 
     constructor(
@@ -148,7 +148,8 @@ export class CalculatorComponent implements OnInit {
             },
             accommodationModel: modelObject.accommodationModel,
             energyAccommodation: Number(modelObject.energyAccommodation),
-            surfaceMass: Number(modelObject.surfaceMass)
+            surfaceMass: Number(modelObject.surfaceMass),
+            userId: this.userId
         };
         return submitFormat;
     }
@@ -162,10 +163,7 @@ export class CalculatorComponent implements OnInit {
         this.uploadedFileName = file ? file.name : undefined;
         this.validateFileUpload();
         if ( file ) {
-            this._modelService.submitGeometryFile( 'custom', file )
-                .subscribe( result => {
-                    this.imageFileId = result.userId;
-                });
+            this._modelService.submitGeometryFile( this.userId, file )
         }
     }
 
@@ -241,14 +239,12 @@ export class CalculatorComponent implements OnInit {
 
     // triggered when any geometry file is chosen
     getFileId( geometry: { identifier: string; label: string} ): void {
-        this.imageFileId = undefined;
         // preloaded file with an identifier
         if ( geometry.identifier ) {
             this.geometryFileName = geometry.label;
-            this._modelService.submitGeometryFile( geometry.identifier )
-                .subscribe( result => {
-                    this.imageFileId = result.userId;
-                });
+            this.userId = geometry.identifier;
+            // New userId means we need to update the payload
+            this.payload = this.createPayload(this.modelForm.value);
         } else {
             // invalid until a file is chosen
             this.uploadSelected = true;
@@ -258,14 +254,14 @@ export class CalculatorComponent implements OnInit {
 
     onSubmit(): void {
         if ( this.modelForm.valid ) {
-            this._modelService.submitSinglePointRequest( this.payload, this.imageFileId ).subscribe( data => {
+            this._modelService.submitSinglePointRequest( this.payload ).subscribe( data => {
                 // this will only work for shallow objects from the api
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
-                if ( this.imageFileId && this.imageOutOfDate && ( this.uploadSelected || this.geometryFileName )) {
+                if ( this.imageOutOfDate && ( this.uploadSelected || this.geometryFileName )) {
                     this.imageOutOfDate = false;
-                    this._modelService.getImage( this.imageFileId ).subscribe( blob => {
+                    this._modelService.getImage( this.userId ).subscribe( blob => {
                         const objectUrl = URL.createObjectURL( blob );
                         this.vrmlImageSrc = this._sanitizer.bypassSecurityTrustUrl( objectUrl );
                     });

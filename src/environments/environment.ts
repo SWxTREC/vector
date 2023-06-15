@@ -6,8 +6,8 @@ import { version } from '../../package.json';
 
 export const environment = {
     // TODO: replace this with actual url, this is for when running the flask app locally
-    vectorApi: 'https://tqsgs1yg76.execute-api.us-east-1.amazonaws.com/prod/api',
-    production: false,
+    vectorApi: 'https://vector-api.dev.swx-trec.com',
+    production: true,
     version: version
 };
 
