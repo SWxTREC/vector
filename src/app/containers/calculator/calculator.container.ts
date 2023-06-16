@@ -53,6 +53,7 @@ export class CalculatorComponent implements OnInit {
     geometryImageSrc: SafeUrl;
     // only complicated geometries have images, so this is undefined for simple geometries, true/false when complicated geometry
     imageOutOfDate: boolean;
+    modelRunning = false;
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: {
@@ -230,11 +231,13 @@ export class CalculatorComponent implements OnInit {
 
     onSubmit(): void {
         if ( this.modelForm.valid ) {
+            this.modelRunning = true;
             this._modelService.submitSinglePointRequest( this.payload ).subscribe( data => {
                 // this will only work for shallow objects from the api
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
+                this.modelRunning = false;
                 // if there is an associated image
                 if ( this.imageOutOfDate === true ) {
                     this.imageOutOfDate = false;
