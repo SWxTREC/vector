@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IModelParameters } from 'src/app/models';
 import { ModelService } from 'src/app/services';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'swt-calculator',
@@ -37,33 +38,21 @@ export class CalculatorComponent implements OnInit {
         'Goodman',
         'Fixed'
     ];
-    objectTypes = [
-        'sphere',
-        'cylinder',
-        'plate',
-        'geometry file'
-    ];
     geometryFileName: string;
-    geometryFiles = [
-        {
-            label: 'SORCE',
-            identifier: 'sorce'
-        },
-        {
-            label: 'CubeSat, 1U',
-            identifier: 'cubesat1u'
-        },
-        {
-            label: 'CubeSat, 3U with Panels',
-            identifier: 'deployable3u'
-        },
-        {
-            label: 'upload',
-            identifier: ''
-        }
-    ];
-    imageOutOfDate = false;
+    geometryNames = {
+        sphere: 'sphere',
+        cylinder: 'cylinder',
+        plate: 'plate (one sided)',
+        sorce: 'SORCE',
+        cubesat1u: 'CubeSat, 1U',
+        deployable3u: 'CubeSat, 3U with Panels'
+    };
+    geometryList = Object.keys(this.geometryNames);
+    simpleGeometryList = [ 'sphere', 'cylinder', 'plate' ];
     fileNotChosen: string;
+    geometryImageSrc: SafeUrl;
+    // only complicated geometries have images, so this is undefined for simple geometries, true/false when complicated geometry
+    imageOutOfDate: boolean;
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: {
@@ -84,6 +73,7 @@ export class CalculatorComponent implements OnInit {
         }
     };
     results: {};
+    sessionId: string = Date.now().toString();
     showArea: boolean;
     showDiameter: boolean;
     showEnergyAccommodation: boolean;
@@ -93,8 +83,6 @@ export class CalculatorComponent implements OnInit {
     showSurfaceMass: boolean;
     uploadedFileName: string;
     uploadSelected = false;
-    userId: string = Math.random().toString(36).substring(2, 8);
-    vrmlImageSrc: SafeUrl;
 
     constructor(
         private _modelService: ModelService,
@@ -116,15 +104,17 @@ export class CalculatorComponent implements OnInit {
         // there is a bug where for number inputs, valueChanges is called twice
         // but that doesn't matter here, just FYI https://github.com/angular/angular/issues/12540
         this.modelForm.controls.pitch.valueChanges
-            .subscribe( () => this.resetImage() );
+            .subscribe( () => this.resetImage( this.modelForm.value.objectType ) );
         this.modelForm.controls.sideslip.valueChanges
-            .subscribe( () => this.resetImage() );
+            .subscribe( () => this.resetImage(  this.modelForm.value.objectType ) );
         this.modelForm.controls.objectType.valueChanges
-            .subscribe( () => {
+            .subscribe( ( type: string ) => {
+                // update the sessionId to break the image cache on the backend
+                this.sessionId = Date.now().toString();
                 this.uploadSelected = false;
                 this.fileNotChosen = undefined;
-                this.geometryFileName = undefined;
-                this.resetImage();
+                this.geometryFileName = this.simpleGeometryList.includes( type ) ? undefined : this.geometryNames[type];
+                this.resetImage( type );
             });
     }
 
@@ -149,21 +139,22 @@ export class CalculatorComponent implements OnInit {
             accommodationModel: modelObject.accommodationModel,
             energyAccommodation: Number(modelObject.energyAccommodation),
             surfaceMass: Number(modelObject.surfaceMass),
-            userId: this.userId
+            sessionId: this.sessionId
         };
         return submitFormat;
     }
 
     // triggered only when a file is uploaded
     fileUpload(file: File): void {
+        this.uploadSelected = true;
         this.fileNotChosen = undefined;
         // reset filename
         this.uploadedFileName = undefined;
-        this.resetImage();
+        this.resetImage( 'custom' );
         this.uploadedFileName = file ? file.name : undefined;
         this.validateFileUpload();
         if ( file ) {
-            this._modelService.submitGeometryFile( this.userId, file )
+            this._modelService.submitGeometryFile( this.sessionId, file );
         }
     }
 
@@ -237,21 +228,6 @@ export class CalculatorComponent implements OnInit {
         }
     }
 
-    // triggered when any geometry file is chosen
-    getFileId( geometry: { identifier: string; label: string} ): void {
-        // preloaded file with an identifier
-        if ( geometry.identifier ) {
-            this.geometryFileName = geometry.label;
-            this.userId = geometry.identifier;
-            // New userId means we need to update the payload
-            this.payload = this.createPayload(this.modelForm.value);
-        } else {
-            // invalid until a file is chosen
-            this.uploadSelected = true;
-            this.validateFileUpload();
-        }
-    }
-
     onSubmit(): void {
         if ( this.modelForm.valid ) {
             this._modelService.submitSinglePointRequest( this.payload ).subscribe( data => {
@@ -259,12 +235,12 @@ export class CalculatorComponent implements OnInit {
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
-                if ( this.imageOutOfDate && ( this.uploadSelected || this.geometryFileName )) {
+                // if there is an associated image
+                if ( this.imageOutOfDate === true ) {
                     this.imageOutOfDate = false;
-                    this._modelService.getImage( this.userId ).subscribe( blob => {
-                        const objectUrl = URL.createObjectURL( blob );
-                        this.vrmlImageSrc = this._sanitizer.bypassSecurityTrustUrl( objectUrl );
-                    });
+                    const geometryIdentifier = this.sessionId;
+                    // add date in query param to stop image caching
+                    this.geometryImageSrc = environment.vectorApi + '/image/' + geometryIdentifier + '?' + Date.now();
                 }
             });
             // format the model form values back to values appropriate for the form
@@ -289,10 +265,10 @@ export class CalculatorComponent implements OnInit {
         }
     }
 
-    resetImage() {
+    resetImage( objectType: string ) {
         this.uploadedFileName = this.uploadSelected ? this.uploadedFileName : undefined;
-        this.vrmlImageSrc = undefined;
-        this.imageOutOfDate = true;
+        this.geometryImageSrc = undefined;
+        this.imageOutOfDate = this.simpleGeometryList.includes( objectType ) ? undefined : true;
     }
 
     round(value: number, decimals: number): string {
@@ -301,15 +277,12 @@ export class CalculatorComponent implements OnInit {
     }
 
     setShowHideConditions(): void {
-        this.showArea = this.modelForm.value.objectType === 'plate';
-        this.showDiameter =
-            this.modelForm.value.objectType === 'sphere' || this.modelForm.value.objectType === 'cylinder';
-        this.showLength = this.modelForm.value.objectType === 'cylinder';
-        this.showPitch =
-            this.modelForm.value.objectType === 'cylinder' ||
-            this.modelForm.value.objectType === 'plate' ||
-            this.modelForm.value.objectType === 'custom';
-        this.showSideslip = this.modelForm.value.objectType === 'custom';
+        const objectType = this.modelForm.value.objectType;
+        this.showArea = objectType === 'plate';
+        this.showDiameter = objectType === 'sphere' || objectType === 'cylinder';
+        this.showLength = objectType === 'cylinder';
+        this.showPitch = objectType !== 'sphere';
+        this.showSideslip = !this.simpleGeometryList.includes( objectType );
         this.showEnergyAccommodation = this.modelForm.value.accommodationModel === 'Fixed';
         this.showSurfaceMass = this.modelForm.value.accommodationModel === 'Goodman';
     }

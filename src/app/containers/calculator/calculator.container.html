@@ -10,20 +10,19 @@
                                 <mat-form-field floatLabel="always" class="form__field form__field--wide">
                                     <mat-label>Object Type</mat-label>
                                     <mat-select formControlName="objectType" panelClass="form__select">
-                                        <ng-container *ngFor="let type of objectTypes">
-                                            <mat-option *ngIf="type !== 'geometry file'" [value]="type" >
-                                                {{type === 'plate' ? 'plate (one sided)' : type}}
+                                        <ng-container *ngFor="let type of geometryList">
+                                            <mat-option [value]="type">
+                                                {{geometryNames[type]}}
                                             </mat-option>
                                         </ng-container>
-                                        <mat-optgroup label="geometry files (.wrl format):">
-                                            <mat-option *ngFor="let geometry of geometryFiles" value="custom" (click)="getFileId(geometry)">
-                                                <span *ngIf="geometry.identifier">{{ geometry.label }}</span>
-                                                <input *ngIf="!geometry.identifier"
+                                        <mat-optgroup label="upload file (.wrl format):">
+                                            <mat-option value="custom">
+                                                <input
                                                 type="file"
                                                 accept=".wrl"
                                                 (change)="fileUpload($event.target.files[0])"
                                                 >
-                                                <span *ngIf="geometry.label === 'upload'">{{ uploadedFileName }}</span>
+                                                <span>{{ uploadedFileName }}</span>
                                             </mat-option>
                                         </mat-optgroup>
                                     </mat-select>
@@ -160,8 +159,8 @@
                         {{ invalidFieldMessage }}
                     </div>
                 </div>
-                <div class="results__item" [class.results__item--hidden]="!vrmlImageSrc">
-                    <ng-container *ngIf="vrmlImageSrc">
+                <div class="results__item" [class.results__item--hidden]="!geometryImageSrc">
+                    <ng-container *ngIf="geometryImageSrc">
                         <mat-card-title>
                             Geometry
                         </mat-card-title>
@@ -169,9 +168,9 @@
                             {{ uploadedFileName || geometryFileName }}
                         </div>
                         <img
-                        [src]="vrmlImageSrc"
-                        alt="image from vrml file"
-                        width="275"
+                            [src]="geometryImageSrc"
+                            alt="drawing of satellite"
+                            width="275"
                         >
                         <div class="results__caption">Direction of velocity is towards the viewer.</div>
                     </ng-container>

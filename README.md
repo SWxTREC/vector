@@ -14,7 +14,7 @@ This is a frontend for interacting with the Space Weather Testbed VECTOR/SESAM m
 
 ## Relevant JIRA Project(s)
 
-* [SWT](http://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
+* [SWT](https://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
 	Space Weather Testbed codebase.
 * [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for VECTOR calculator
 
@@ -70,7 +70,7 @@ Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github
 
 ### Running end-to-end tests
 
-Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Run `npm run e2e` to execute the end-to-end tests via [Protractor](https://www.protractortest.org/).
 
 ## DOCKER
 

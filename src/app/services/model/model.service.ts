@@ -19,8 +19,4 @@ export class ModelService {
         formData.append('file', file);
         return this._http.put<any>( environment.vectorApi + '/geometry/' + id, formData );
     }
-
-    getImage( id: string ) {
-        return this._http.get<Blob>( environment.vectorApi + '/image/' + id);
-    }
 }
