@@ -74,7 +74,7 @@ export class CalculatorComponent implements OnInit {
         }
     };
     results: {};
-    sessionId: string = Date.now().toString();
+    sessionId: string = 'id-' + Date.now();
     showArea: boolean;
     showDiameter: boolean;
     showEnergyAccommodation: boolean;
@@ -111,7 +111,7 @@ export class CalculatorComponent implements OnInit {
         this.modelForm.controls.objectType.valueChanges
             .subscribe( ( type: string ) => {
                 // update the sessionId to break the image cache on the backend
-                this.sessionId = Date.now().toString();
+                this.sessionId = 'id-' + Date.now();
                 this.uploadSelected = false;
                 this.fileNotChosen = undefined;
                 this.geometryFileName = this.simpleGeometryList.includes( type ) ? undefined : this.geometryNames[type];
