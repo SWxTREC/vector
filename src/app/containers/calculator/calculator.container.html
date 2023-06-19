@@ -20,9 +20,9 @@
                                                 <input
                                                 type="file"
                                                 accept=".wrl"
-                                                (change)="fileUpload($event.target.files[0])"
+                                                (change)="onFileSelect($event.target)"
                                                 >
-                                                <span>{{ uploadedFileName }}</span>
+                                                <span>{{ uploadedImageName }}</span>
                                             </mat-option>
                                         </mat-optgroup>
                                     </mat-select>
@@ -165,7 +165,7 @@
                             Geometry
                         </mat-card-title>
                         <div>
-                            {{ uploadedFileName || geometryFileName }}
+                            {{ uploadedImageName || preloadedImageName }}
                         </div>
                         <img
                             [src]="geometryImageSrc"
