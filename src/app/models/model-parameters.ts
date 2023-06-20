@@ -17,4 +17,5 @@ export interface IModelParameters {
     accommodationModel: string;
     energyAccommodation: number;
     surfaceMass: number;
+    sessionId: string;
 }

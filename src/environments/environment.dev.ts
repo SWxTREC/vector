@@ -1,7 +1,7 @@
 import { version } from '../../package.json';
 
 export const environment = {
-    vectorApi: 'https://vector-api.prod.swx-trec.com',
-    production: true,
+    vectorApi: 'https://vector-api.dev.swx-trec.com',
+    production: false,
     version: version
 };

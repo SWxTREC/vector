@@ -1,6 +1,12 @@
 @import 'src/theme/theme-colors.scss';
 $helper-font-size: 8pt;
 
+@keyframes fade {
+  0%   { opacity:1; }
+  50%  { opacity:0.7; }
+  100% { opacity:1; }
+}
+
 .form {
     margin: 1rem;
     &__column {
@@ -63,6 +69,9 @@ $helper-font-size: 8pt;
     }
     &__submit {
         text-align: right;
+        &--pending {
+            animation: fade 1.75s infinite;
+        }
     }
     &__warning {
         font-size: $helper-font-size;
