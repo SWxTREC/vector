@@ -73,7 +73,7 @@ export class CalculatorComponent implements OnInit {
         }
     };
     results: {};
-    sessionId: string = 'id-' + Date.now();
+    sessionId: string;
     showArea: boolean;
     showDiameter: boolean;
     showEnergyAccommodation: boolean;
@@ -89,6 +89,7 @@ export class CalculatorComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.newSessionId();
         this.createPayload();
         this.setShowHideConditions();
 
