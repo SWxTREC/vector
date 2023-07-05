@@ -45,7 +45,7 @@
     "eslint-plugin-unicorn": "^42.0.0",
     "lasp-base-app-snippets": "^4.0.0",
     "lasp-footer": "^1.10.8",
-    "lasp-nav": "^1.5.1",
+    "lasp-nav": "^1.10.9",
     "lasp-search": "^1.0.7",
     "moment": "^2.24.0",
     "ngx-markdown": "^11.1.3",
