@@ -5,11 +5,10 @@ import {
 } from 'lasp-base-app-snippets';
 import {
     IImageLink,
-    INavItem,
     ISocialLink,
     IVersion
 } from 'lasp-footer';
-
+import { INavItem } from 'lasp-nav';
 
 import { environment } from '../environments/environment';
 
@@ -55,7 +54,7 @@ export class AppComponent {
         }
     ];
 
-    constructor( private _snippets: LaspBaseAppSnippetsService ) {
-        this._snippets.appComponent.allExcept([ this._snippets.appComponent.setupGoogleAnalytics ]);
+    constructor( private _snippetsService: LaspBaseAppSnippetsService ) {
+        this._snippetsService.appComponent.all({ googleAnalyticsId: environment.googleAnalyticsId });
     }
 }

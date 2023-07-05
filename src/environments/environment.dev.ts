@@ -1,7 +1,8 @@
-import { version } from '../../package.json';
+import packageInfo from '../../package.json';
 
 export const environment = {
-    vectorApi: 'https://vector-api.dev.swx-trec.com',
+    googleAnalyticsId: '', // intentionally empty; don't try to track usage on dev
     production: false,
-    version: version
+    vectorApi: 'https://vector-api.dev.swx-trec.com',
+    version: packageInfo.version
 };

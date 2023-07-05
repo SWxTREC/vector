@@ -1,7 +1,8 @@
-import { version } from '../../package.json';
+import packageInfo from '../../package.json';
 
 export const environment = {
-    vectorApi: 'https://vector-api.prod.swx-trec.com',
+    googleAnalyticsId: 'GT-5NRMGGR',
     production: true,
-    version: version
+    vectorApi: 'https://vector-api.prod.swx-trec.com',
+    version: packageInfo.version
 };
