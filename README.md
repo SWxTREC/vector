@@ -1,40 +1,42 @@
 # VECTOR
 
-Deployed site: https://swxtrec.github.io/vector
+A tool for interacting with the SWx TREC Model Staging Platform VECTOR/SESAM model by Marcin Pilinski.
 
-This is a frontend for interacting with the Space Weather Testbed VECTOR/SESAM model by Marcin Pilinski.
+Deployed site: https://swx-trec.com/vector
+Dev site: https://dev.swx-trec.com/vector
+Branch demos: https://dev.swx-trec.com/`<branch-name>`
+Github pages site: https://swxtrec.github.io/vector
 
 ## Contacts
 
 * **Product Owner:**
 	Marcin Pilinski, marcin.pilinski@lasp.colorado.edu
 * **Experienced Devs:**
-    Front end: Jennifer Knuth, jennifer.knuth@lasp.colorado.edu
-	Back end: Greg Lucas, greg.lucase@lasp.coloardo.edu
+    Frontend: Jennifer Knuth, jennifer.knuth@lasp.colorado.edu
+	Backend: Greg Lucas, greg.lucase@lasp.coloardo.edu
 
 ## Relevant JIRA Project(s)
 
 * [SWT](https://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
 	Space Weather Testbed codebase.
 * [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for VECTOR calculator
+* [Vector Updates](https://jira.lasp.colorado.edu/browse/SWT-343): VECTOR epic
 
 ## Related Projects
 
-NA
+This is one of a suite of applications deployed to the SWx TREC Model Staging Platform at https://swx-trec.com.
 
-## Production URLs
-
-https://swxtrec.github.io/vector
+GitHub organization: https://github.com/SWxTREC
 
 ## Necessary Permissions
 
-TK
+Jenkins jobs are used to deploy the application and the application is built on internal libraries, so development needs to be done behind the firewall.
 
 ## Architecture
 
 This is the frontend code that sets the parameters to run the VECTOR model in AWS.
 
-A Flask backend has been set up to create an API that receives a POST request with the model parameters and returns a GET request with the result.
+A Flask backend has been set up to create an API that receives a POST request with the model parameters and returns a GET request with the result. The backend code is publicly available at [https://github.com/SWxTREC/vector-code](https://github.com/SWxTREC/vector-code).
 
 ## Running VECTOR Locally
 
@@ -42,7 +44,7 @@ See 'Developement server' below.
 
 ### Project Dependencies
 
-VECTOR backend is needed in production.
+VECTOR backend is needed.
 
 ### Development server
 
@@ -93,19 +95,29 @@ Cleaning up old images is also a good idea from time to time. To clean up your u
 When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
 
 ## Deploy VECTOR
-Who needs to be made aware of a release? What limitations/restrictions are there before making a
-release? For example, is there an explicit vetting process, or perhaps certain time windows when a
-release shouldn't be made?
 
-### Bump the version
+Be sure to `npm run lint && npm test` before creating a PR.
 
-From the master branch, run `npm version <major | minor | patch>` where major indicates a breaking change, minor is noticeable but non-breaking interface change, and patch is a non-breaking, under-the-hood refinement.
+When a PR is created, the branch is served, and can be reviewed, outside of the LASP network at https://dev.swx-trec.com/`<branch-name>`. The branch deploy will update with changes to the branch code.
+
+Merges to the `dev` branch will automatically be deployed to <https://dev.swx-trec.com/vector>. This is the `dev` deploy in the AWS environment and the contents of the `dev` branch will be reflected there. It uses a production build and the `.dev` environment file where `production = false`.
+
+To manually trigger a deploy of the dev branch, run this job: https://jenkins-build.lasp.colorado.edu/job/swx-vector-dev/
+
+### Version and release
+
+Once <https://dev.swx-trec.com/vector> is tested and ready for a release, merge `dev` into `main`. From the `main` branch, run `npm version <major | minor | patch>` where major indicates a breaking change, minor is noticeable but non-breaking interface change, and patch is a non-breaking, under-the-hood refinement.
 
 This will:
 
-* run the linter and unit tests, and abort if they fail
+* run the linter and unit tests and abort if they fail
 * increment the version, commit the change, and create a git tag
 * push the changes and the new tag to the remote repo
+* merge the version changes back into the dev branch
+
+### Deploy to AWS
+
+Run this Jenkins job https://jenkins-build.lasp.colorado.edu/job/swx-vector-prod/ to make a production build. Currently there is a manual step to deploy to the production AWS environment. Notify Brian McClellan or Greg Lucas to do this step. In future this will be automated.
 
 ### Deploy to GitHub pages
 
@@ -120,15 +132,3 @@ This will:
 After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/vector.
 
 You can run this script from any branch, but the site should reflect the content of the current master branch.
-
-## FAQs and Help
-
-### VECTOR-specific common issues, gotchas
-
-Any kind of project-specific issues that would pop up goes here, as well as any quirks or
-inconsistencies within the project (e.g. hacks, workarounds, "I don't know why this works but....")
-
-## External Resources
-
-Useful documentation that isn't ours (for example, in LaTiS, maybe links to Scala documentation, or
-higher level topics like RDB and Data Model articles/resources)

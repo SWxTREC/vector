@@ -5,8 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:pages": "ng build --prod --output-path docs --base-href=/vector/",
-    "build:prod": "ng build --prod",
+    "build:dev": "ng build --configuration production,dev --base-href=/vector/",
+    "build:pages": "ng build --configuration production --output-path docs --base-href=/vector/",
+    "build:prod": "ng build --configuration production --base-href=/vector/",
     "deploy": "npm run build:pages && cp docs/index.html docs/404.html && gh-pages -d docs",
     "test": "ng test",
     "lint": "ng lint",
@@ -14,7 +15,7 @@
     "lint:watch": "nodemon --exec \"ng lint\" --ext ts --ignore node_modules/",
     "e2e": "ng e2e",
     "preversion": "ng lint && ng test -- --no-watch --no-progress",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && git checkout dev && git merge origin/main && git push"
   },
   "private": true,
   "dependencies": {
