@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { LaspBaseAppSnippetsService } from 'lasp-base-app-snippets';
 import { IModelParameters } from 'src/app/models';
 import { ModelService } from 'src/app/services';
 import { environment } from 'src/environments/environment';
@@ -85,10 +86,12 @@ export class CalculatorComponent implements OnInit {
 
     constructor(
         private _modelService: ModelService,
-        private _sanitizer: DomSanitizer
+        private _sanitizer: DomSanitizer,
+        private _snippetsService: LaspBaseAppSnippetsService
     ) {}
 
     ngOnInit() {
+        this._snippetsService.misc.ignoreMaxPageWidth( this );
         this.newSessionId();
         this.createPayload();
         this.setShowHideConditions();

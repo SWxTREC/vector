@@ -1,13 +1,14 @@
-import { version } from '../../package.json';
+import packageInfo from '../../package.json';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    vectorApi: 'https://vector-api.dev.swx-trec.com',
+    googleAnalyticsId: '', // intentionally empty; don't try to track usage during development
     production: false,
-    version: version
+    vectorApi: 'https://vector-api.dev.swx-trec.com',
+    version: packageInfo.version
 };
 
 /*
