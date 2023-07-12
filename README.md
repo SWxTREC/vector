@@ -78,19 +78,19 @@ If you are using docker, be sure to follow the instructions in after-fork.instru
 
 ### Building a docker image
 
-Once you have followed the steps in after-fork.instructions you can run `./docker-build.sh` to build a new image locally
+Once you have followed the steps in after-fork.instructions you can run `./dockerctl.sh build` to build a new image locally
 
 ### Running a dev image locally
 
-Once you have built your image using the command above, you can `./docker-run.sh` to start a local development image. This image will be served at `http://localhost:8080/dev`
+Once you have built your image using the command above, you can `./dockerctl.sh run` to start a local development image. This image will be served at `http://localhost:8080/vector`
 
-To stop your image run `docker stop {{Project-name}}`
+To stop your image run `./dockerctl.sh stop`
 
 Cleaning up old images is also a good idea from time to time. To clean up your unused docker resources run `docker system prune`
 
 ### Pushing an image to the LASP web registry
 
-When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
+When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./dockerctl.sh publish` to publish your image to the server.
 
 ## Deploy VECTOR
 Who needs to be made aware of a release? What limitations/restrictions are there before making a
