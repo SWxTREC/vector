@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -eu
 # Script to perform docker build, run, and publish functions.
+REGISTRY=docker-registry.pdmz.lasp.colorado.edu/web # Default registry
+IMAGE=vector
+PORT=8080
 # This is used to build the "dev" image tag when the Jenkins job is run with the "dev" branch parameter 
 if [[ ! -z ${REFSPEC+x} ]] && [ "${REFSPEC}" = "dev" ] ; then
   VERSION=dev
@@ -8,9 +11,6 @@ else
   # Get version from package.json
   VERSION=$(npm pkg get version | tr -d '"')
 fi
-REGISTRY=docker-registry.pdmz.lasp.colorado.edu/web # Default registry
-IMAGE=vector
-PORT=8080
 
 function print_usage() {
   printf "Usage: $0 [option]\n"
