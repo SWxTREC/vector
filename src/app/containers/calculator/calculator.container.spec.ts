@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MaterialModule } from 'src/app/modules';
 
 import { CalculatorComponent } from './calculator.container';
@@ -17,6 +18,7 @@ describe('CalculatorComponent', () => {
                 BrowserAnimationsModule,
                 HttpClientModule,
                 ReactiveFormsModule,
+                RouterTestingModule,
                 MaterialModule
             ]
         })

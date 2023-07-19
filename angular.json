@@ -17,6 +17,9 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+                        "allowedCommonJsDependencies": [
+                            "moment"
+                        ],
                         "outputPath": "dist/swt",
                         "index": "src/index.html",
                         "main": "src/main.ts",
@@ -65,6 +68,14 @@
                                     "maximumWarning": "6kb"
                                 }
                             ]
+                        },
+                        "dev": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.dev.ts"
+                                }
+                            ]
                         }
                     },
                     "defaultConfiguration": ""
@@ -77,6 +88,9 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "swt:build:production"
+                        },
+                        "dev": {
+                            "browserTarget": "swt:build:dev"
                         }
                     }
                 },
@@ -145,6 +159,7 @@
     },
     "defaultProject": "swt",
     "cli": {
+        "analytics": false,
         "defaultCollection": "@angular-eslint/schematics"
     }
 }
