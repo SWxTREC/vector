@@ -7,13 +7,17 @@ Dev site: https://dev.swx-trec.com/vector
 Branch demos: https://dev.swx-trec.com/`<branch-name>`
 Github pages site: https://swxtrec.github.io/vector
 
+Title: VECTOR—Vehicle Environment Coupling and TrajectOry Response
+Description: Calculate the coefficient of drag, projected area, and force coefficient from a given set of input parameters
+Tagline: Profile a spacecraft's trajectory in its environment
+
 ## Contacts
 
 * **Product Owner:**
 	Marcin Pilinski, marcin.pilinski@lasp.colorado.edu
 * **Experienced Devs:**
     Frontend: Jennifer Knuth, jennifer.knuth@lasp.colorado.edu
-	Backend: Greg Lucas, greg.lucase@lasp.coloardo.edu
+	Backend: Greg Lucas, greg.lucas@lasp.coloardo.edu
 
 ## Relevant JIRA Project(s)
 
