@@ -9,7 +9,7 @@ Github pages site: https://swxtrec.github.io/vector
 
 Title: VECTOR—Vehicle Environment Coupling and TrajectOry Response
 Description: Calculate the coefficient of drag, projected area, and force coefficient from a given set of input parameters
-Tagline: Profile a spacecraft's trajectory in its environment
+Tagline: Input geometry, attitude, and environment to calculate a spacecraft’s drag coefficient
 
 ## Contacts
 
